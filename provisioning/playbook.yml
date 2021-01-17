@@ -31,8 +31,8 @@
 
     # Increase minimum password strength
     - role: gantsign.pwquality
-      pwquality_minlen: 16
-      pwquality_maxrepeat: 3
+      pwquality_minlen: 8
+      pwquality_maxrepeat: 10
       # See https://github.com/gantsign/ansible_role_pwquality for more options
 
     # Increase the number of files that can be watched.
@@ -165,9 +165,9 @@
         - hub
 
     # Install lazygit command line UI for git
-    - role: gantsign.lazygit
-      tags:
-        - lazygit
+    #- role: gantsign.lazygit
+    #  tags:
+    #    - lazygit
 
     # Install Docker
     - role: angstwad.docker_ubuntu
@@ -218,18 +218,18 @@
         - docker
 
     # Install Pyenv
-    - role: gantsign.pyenv
-      tags:
-        - python
-      pyenv_users:
-        - vagrant
+    #- role: gantsign.pyenv
+    #  tags:
+    #    - python
+    #  pyenv_users:
+    #    - vagrant
 
     # Install Pipenv
-    - role: gantsign.pipenv
-      tags:
-        - python
-      pipenv_users:
-        - vagrant
+    #- role: gantsign.pipenv
+    #  tags:
+    #    - python
+    #  pipenv_users:
+    #    - vagrant
 
     # Install Java JDK 8
     - role: gantsign.java
@@ -239,7 +239,7 @@
       java_is_default_installation: no
       java_fact_group_name: java_8
 
-    # Install Java JDK 11
+    ## Install Java JDK 11
     - role: gantsign.java
       tags:
         - java
@@ -268,10 +268,10 @@
         - name: typings
 
     # Install Go language SDK
-    - role: gantsign.golang
-      tags:
-        - golang
-      golang_gopath: '$HOME/workspace-go'
+    #- role: gantsign.golang
+    #  tags:
+    #    - golang
+    #  golang_gopath: '$HOME/workspace-go'
 
     # Enable audio support
     - role: gantsign.audio
@@ -329,48 +329,48 @@
         - postman
 
     # Install Visual Studio Code editor
-    - role: gantsign.visual-studio-code
-      tags:
-        - gui
-        - vscode
-      users:
-        - username: vagrant
-          visual_studio_code_extensions:
-            - EditorConfig.EditorConfig
-            - streetsidesoftware.code-spell-checker
-            - wholroyd.jinja
-            - rebornix.Ruby
-          visual_studio_code_settings: {
-            "editor.rulers": [80, 100, 120],
-            "editor.renderWhitespace": true,
-            "files.associations": {
-              "Vagrantfile": "ruby",
-              ".vagrantuser": "yaml",
-              ".vagrantuser.example": "yaml"
-            }
-          }
+    #- role: gantsign.visual-studio-code
+    #  tags:
+    #    - gui
+    #    - vscode
+    #  users:
+    #    - username: vagrant
+    #      visual_studio_code_extensions:
+    #        - EditorConfig.EditorConfig
+    #        - streetsidesoftware.code-spell-checker
+    #        - wholroyd.jinja
+    #        - rebornix.Ruby
+    #      visual_studio_code_settings: {
+    #        "editor.rulers": [80, 100, 120],
+    #        "editor.renderWhitespace": true,
+    #        "files.associations": {
+    #          "Vagrantfile": "ruby",
+    #          ".vagrantuser": "yaml",
+    #          ".vagrantuser.example": "yaml"
+    #        }
+    #      }
 
     # Install Go extension for Visual Studio Code editor
-    - role: gantsign.visual-studio-code-extensions
-      tags:
-        - gui
-        - vscode
-        - golang
-      users:
-        - username: vagrant
-          visual_studio_code_extensions:
-            - golang.Go
+    #- role: gantsign.visual-studio-code-extensions
+    #  tags:
+    #    - gui
+    #    - vscode
+    #    - golang
+    #  users:
+    #    - username: vagrant
+    #      visual_studio_code_extensions:
+    #        - golang.Go
 
     # Install Python extension for Visual Studio Code editor
-    - role: gantsign.visual-studio-code-extensions
-      tags:
-        - gui
-        - vscode
-        - python
-      users:
-        - username: vagrant
-          visual_studio_code_extensions:
-            - ms-python.python
+    #- role: gantsign.visual-studio-code-extensions
+    #  tags:
+    #    - gui
+    #    - vscode
+    #    - python
+    #  users:
+    #    - username: vagrant
+    #      visual_studio_code_extensions:
+    #        - ms-python.python
 
     # Install and configure IntelliJ IDEA IDE
     - role: gantsign.intellij
@@ -443,6 +443,9 @@
             - tanvd.grazi
             # For drawing diagrams
             - 'PlantUML integration'
+            - cucumber-java
+            - PMDPlugin
+            - org.sonarlint.idea
           intellij_license_key_path: '{{ intellij_license_key_path }}'
 
     # Configure JDKs in IntelliJ IDEA IDE
@@ -487,16 +490,16 @@
             - "{{ (intellij_edition == 'community') | ternary('PythonCore', 'Pythonid') }}"
 
     # Install Go plugin for IntelliJ IDEA IDE
-    - role: gantsign.intellij-plugins
-      tags:
-        - gui
-        - intellij
-        - golang
-      users:
-        - username: vagrant
-          intellij_plugins:
-            - org.jetbrains.plugins.go
-      when: "intellij_edition == 'ultimate'"
+    #- role: gantsign.intellij-plugins
+    #  tags:
+    #    - gui
+    #    - intellij
+    #    - golang
+    #  users:
+    #    - username: vagrant
+    #      intellij_plugins:
+    #        - org.jetbrains.plugins.go
+    #  when: "intellij_edition == 'ultimate'"
 
     # Add Maven extension to popup a GUI notification when builds finish
     - role: gantsign.maven-notifier
@@ -548,154 +551,154 @@
         GRADLE_OPTS: '-Xmx64m -XX:TieredStopAtLevel=1 -Xverify:none'
 
     # Install Antigen Zsh shell enhancements
-    - role: gantsign.antigen
-      tags:
-        - oh-my-zsh
-      users:
-        - username: vagrant
-          antigen_libraries:
-            - name: oh-my-zsh
-              env:
-                DISABLE_AUTO_UPDATE: '"true"' # Should be rebuilding the VM
-          antigen_theme:
-            name: robbyrussell
-          antigen_bundles:
-            - name: command-not-found
-            - name: common-aliases
-            - name: colored-man-pages
-            - name: git
-            - name: httpie
-            - name: sudo
-            - name: bat
-              url: gantsign/zsh-plugins
-              location: bat
-            - name: fd
-              url: gantsign/zsh-plugins
-              location: fd
-            - name: moleculew
-              url: gantsign/molecule-wrapper
-              location: zsh
+    #- role: gantsign.antigen
+    #  tags:
+    #    - oh-my-zsh
+    #  users:
+    #    - username: vagrant
+    #      antigen_libraries:
+    #        - name: oh-my-zsh
+    #          env:
+    #            DISABLE_AUTO_UPDATE: '"true"' # Should be rebuilding the VM
+    #      antigen_theme:
+    #        name: robbyrussell
+    #      antigen_bundles:
+    #        - name: command-not-found
+    #        - name: common-aliases
+    #        - name: colored-man-pages
+    #        - name: git
+    #        - name: httpie
+    #        - name: sudo
+    #        - name: bat
+    #          url: gantsign/zsh-plugins
+    #          location: bat
+    #        - name: fd
+    #          url: gantsign/zsh-plugins
+    #          location: fd
+    #        - name: moleculew
+    #          url: gantsign/molecule-wrapper
+    #          location: zsh
 
-    - role: gantsign.antigen
-      tags:
-        - oh-my-zsh
-        - zsh-autosuggestions
-      users:
-        - username: vagrant
-          antigen_bundles:
-            - name: zsh-autosuggestions
-              url: zsh-users/zsh-autosuggestions
+    #- role: gantsign.antigen
+    #  tags:
+    #    - oh-my-zsh
+    #    - zsh-autosuggestions
+    #  users:
+    #    - username: vagrant
+    #      antigen_bundles:
+    #        - name: zsh-autosuggestions
+    #          url: zsh-users/zsh-autosuggestions
 
-    - role: gantsign.antigen
-      tags:
-        - oh-my-zsh
-        - zsh-syntax-highlighting
-      users:
-        - username: vagrant
-          antigen_bundles:
-            # bundles are loaded by name alpabetically
-            # and fast-syntax-highlighting must be loaded last
-            - name: zzz
-              url: zdharma/fast-syntax-highlighting
+    #- role: gantsign.antigen
+    #  tags:
+    #    - oh-my-zsh
+    #    - zsh-syntax-highlighting
+    #  users:
+    #    - username: vagrant
+    #      antigen_bundles:
+    #        # bundles are loaded by name alpabetically
+    #        # and fast-syntax-highlighting must be loaded last
+    #        - name: zzz
+    #          url: zdharma/fast-syntax-highlighting
 
-    - role: gantsign.antigen_bundles
-      tags:
-        - oh-my-zsh
-        - docker
-      users:
-        - username: vagrant
-          antigen_bundles:
-            - name: docker
-            - name: ctop
-              url: gantsign/zsh-plugins
-              location: ctop
-            - name: dive
-              url: gantsign/zsh-plugins
-              location: dive
+    # role: gantsign.antigen_bundles
+    # tags:
+    #   - oh-my-zsh
+    #   - docker
+    # users:
+    #   - username: vagrant
+    #     antigen_bundles:
+    #       - name: docker
+    #       - name: ctop
+    #         url: gantsign/zsh-plugins
+    #         location: ctop
+    #       - name: dive
+    #         url: gantsign/zsh-plugins
+    #         location: dive
 
-    - role: gantsign.antigen_bundles
-      tags:
-        - oh-my-zsh
-        - docker
-        - kubernetes
-      users:
-        - username: vagrant
-          antigen_bundles:
-            - name: kubectl
-            - name: kubeadm
-              url: gantsign/zsh-plugins
-              location: kubeadm
-            - name: minikube-none
-              url: gantsign/zsh-plugins
-              location: minikube-none
-            - name: helm
-            - name: kompose
-              url: gantsign/zsh-plugins
-              location: kompose
-            - name: kops
+    #- role: gantsign.antigen_bundles
+    #  tags:
+    #    - oh-my-zsh
+    #    - docker
+    #    - kubernetes
+    #  users:
+    #    - username: vagrant
+    #      antigen_bundles:
+    #        - name: kubectl
+    #        - name: kubeadm
+    #          url: gantsign/zsh-plugins
+    #          location: kubeadm
+    #        - name: minikube-none
+    #          url: gantsign/zsh-plugins
+    #          location: minikube-none
+    #        - name: helm
+    #        - name: kompose
+    #          url: gantsign/zsh-plugins
+    #          location: kompose
+    #        - name: kops
 
-    - role: gantsign.antigen_bundles
-      tags:
-        - oh-my-zsh
-        - java
-        - maven
-      users:
-        - username: vagrant
-          antigen_bundles:
-            - name: mvn
+    #- role: gantsign.antigen_bundles
+    #  tags:
+    #    - oh-my-zsh
+    #    - java
+    #    - maven
+    #  users:
+    #    - username: vagrant
+    #      antigen_bundles:
+    #        - name: mvn
 
-    - role: gantsign.antigen_bundles
-      tags:
-        - oh-my-zsh
-        - java
-        - gradle
-      users:
-        - username: vagrant
-          antigen_bundles:
-            - name: gradle
+    #- role: gantsign.antigen_bundles
+    #  tags:
+    #    - oh-my-zsh
+    #    - java
+    #    - gradle
+    #  users:
+    #    - username: vagrant
+    #      antigen_bundles:
+    #        - name: gradle
 
-    - role: gantsign.antigen_bundles
-      tags:
-        - oh-my-zsh
-        - nodejs
-      users:
-        - username: vagrant
-          antigen_bundles:
-            - name: npm
-            - name: yarn
+    #- role: gantsign.antigen_bundles
+    #  tags:
+    #    - oh-my-zsh
+    #    - nodejs
+    #  users:
+    #    - username: vagrant
+    #      antigen_bundles:
+    #        - name: npm
+    #        - name: yarn
 
-    - role: gantsign.antigen_bundles
-      tags:
-        - oh-my-zsh
-        - python
-      users:
-        - username: vagrant
-          antigen_bundles:
-            - name: pip
-            - name: pyenv
-            - name: pipenv
-              url: gantsign/zsh-plugins
-              location: pipenv
+    #- role: gantsign.antigen_bundles
+    #  tags:
+    #    - oh-my-zsh
+    #    - python
+    #  users:
+    #    - username: vagrant
+    #      antigen_bundles:
+    #        - name: pip
+    #        - name: pyenv
+    #        - name: pipenv
+    #          url: gantsign/zsh-plugins
+    #          location: pipenv
 
-    - role: gantsign.antigen_bundles
-      tags:
-        - oh-my-zsh
-        - hub
-      users:
-        - username: vagrant
-          antigen_bundles:
-            - name: hub
-              url: '/usr/local/share/hub/zsh'
+    #- role: gantsign.antigen_bundles
+    #  tags:
+    #    - oh-my-zsh
+    #    - hub
+    #  users:
+    #    - username: vagrant
+    #      antigen_bundles:
+    #        - name: hub
+    #          url: '/usr/local/share/hub/zsh'
 
-    - role: gantsign.antigen_bundles
-      tags:
-        - oh-my-zsh
-        - sdkman
-      users:
-        - username: vagrant
-          antigen_bundles:
-            - name: sdkman
-              url: '$HOME/.sdkman-zsh'
+    #- role: gantsign.antigen_bundles
+    #  tags:
+    #    - oh-my-zsh
+    #    - sdkman
+    #  users:
+    #    - username: vagrant
+    #      antigen_bundles:
+    #        - name: sdkman
+    #          url: '$HOME/.sdkman-zsh'
 
     # Install SDKMAN software development kit manager
     - role: gantsign.sdkman

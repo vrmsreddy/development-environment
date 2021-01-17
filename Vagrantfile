@@ -37,7 +37,7 @@ Vagrant.configure(2) do |config|
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
-  # config.vm.box_check_update = false
+  config.vm.box_check_update = false
 
   # Specifying an unsupported audio setting will cause VirtualBox provisioning
   # to fail.
@@ -100,42 +100,42 @@ Vagrant.configure(2) do |config|
     },
 
     'virtualbox' => {
-      'name' => 'development-environment',
+      'name' => 'java-dev.world',
       'gui' => true,
-      'cpus' => 2,
+      'cpus' => 4,
       'graphicscontroller' => nil,
       'vram' => '64',
       'accelerate3d' => 'off',
-      'memory' => '4096',
+      'memory' => '6144',
       'clipboard' => 'bidirectional',
       'draganddrop' => 'bidirectional',
       'audio' => default_vb_audio,
       'audiocontroller' => default_vb_audiocontroler
     },
 
-    'timezone' => 'Europe/London',
+    'timezone' => 'Asia/Kolkata',
 
     'locales' => {
-      'default' => 'en_GB.UTF-8',
-      'present' => ['en_GB.UTF-8', 'en_US.UTF-8']
+      'default' => 'en_US.UTF-8',
+      'present' => ['en_US.UTF-8', 'en_US.UTF-8']
     },
 
     'keyboard' => {
       'model' => 'pc105',
-      'layout' => 'gb',
+      'layout' => 'us',
       'variant' => ''
     },
 
     'dock_position' => 'LEFT',
 
     'git_user' => {
-      'name' => nil,
-      'email' => nil,
-      'force' => false
+      'name' => 'vrmsreddy',
+      'email' => 'vr.msreddy@gmail.com',
+      'force' => 'true'
     },
 
     # Deprecated use intellij.edition instead
-    'intellij_edition' => nil,
+    'intellij_edition' => 'community',
 
     'intellij' => {
       'edition' => 'community',
@@ -157,8 +157,10 @@ Vagrant.configure(2) do |config|
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
   # your network.
-  # config.vm.network 'public_network'
-
+  #config.vm.network 'public_network'
+  config.vm.network "public_network"
+  #Host name
+  config.vm.hostname = 'java-dev.world'
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
@@ -197,7 +199,7 @@ Vagrant.configure(2) do |config|
     vb.memory = config.user.virtualbox.memory
 
     # Enable host desktop integration
-    vb.customize ['modifyvm', :id, '--clipboard', config.user.virtualbox.clipboard]
+    vb.customize ['modifyvm', :id, '--clipboard-mode', config.user.virtualbox.clipboard]
     vb.customize ['modifyvm', :id, '--draganddrop', config.user.virtualbox.draganddrop]
 
     unless config.user.virtualbox.audio.nil?
@@ -344,5 +346,13 @@ SCRIPT
   config.vm.provision :reload
 
   # Force password change on first use
-  config.vm.provision 'shell', inline: 'chage --lastday 0 vagrant'
+  #config.vm.provision 'shell', inline: 'chage --lastday 0 vagrant'
+
+  #Push box to vagrantcloud.com
+  config.push.define "ftp" do |push|
+    push.host = "ftp://vagrantcloud.com"
+    #push.host = "ftp.company.com"
+    push.username = "vrmsreddy"
+  end
 end
+
