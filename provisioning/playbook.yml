@@ -446,6 +446,7 @@
             - cucumber-java
             - PMDPlugin
             - org.sonarlint.idea
+            - gherkin
           intellij_license_key_path: '{{ intellij_license_key_path }}'
 
     # Configure JDKs in IntelliJ IDEA IDE
