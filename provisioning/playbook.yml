@@ -5,6 +5,8 @@
   vars:
     x_ansible_download_dir: /usr/local/src/ansible/data
     intellij_edition: community
+    # IntelliJ IDEA version number
+i   ntellij_version: '2022.3.2'
 
   pre_tasks:
     - name: update apt cache
