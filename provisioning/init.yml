@@ -6,12 +6,20 @@
     # Reduce the number of times `apt-get update` needs to be run by
     # pre-registering repositories
 
+    - name: Create APT keyrings dir
+      become: yes
+      file:
+        path: '/etc/apt/keyrings'
+        state: directory
+        mode: 'u=rwx,go=rx'
+
     - name: add kubernetes key
       become: yes
-      apt_key:
-        id: '6A030B21BA07F4FB'
+      get_url:
         url: 'https://packages.cloud.google.com/apt/doc/apt-key.gpg'
-        state: present
+        dest: '/etc/apt/keyrings/cloud.google.gpg'
+        mode: 'u=rw,go=r'
+        force: yes
       tags:
         - docker
         - kubernetes
@@ -19,7 +27,9 @@
     - name: add kubernetes repo
       become: yes
       apt_repository:
-        repo: 'deb http://apt.kubernetes.io/ kubernetes-xenial main'
+        repo: >-
+          deb [signed-by=/etc/apt/keyrings/cloud.google.gpg]
+          http://apt.kubernetes.io/ kubernetes-xenial main
         update_cache: no
       tags:
         - docker
@@ -28,9 +38,11 @@
 
     - name: add Google Linux key
       become: yes
-      apt_key:
+      get_url:
         url: 'https://dl-ssl.google.com/linux/linux_signing_key.pub'
-        state: present
+        dest: '/etc/apt/keyrings/linux.google.asc'
+        mode: 'u=rw,go=r'
+        force: yes
       tags:
         - gui
         - chrome
@@ -38,7 +50,9 @@
     - name: add Google Chrome repo
       become: yes
       apt_repository:
-        repo: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main'
+        repo: >-
+          deb [arch=amd64 signed-by=/etc/apt/keyrings/linux.google.asc]
+          https://dl.google.com/linux/chrome/deb/ stable main
         filename: google-chrome
         update_cache: no
       tags:
@@ -48,9 +62,11 @@
 
     - name: add vscode key
       become: yes
-      apt_key:
+      get_url:
         url: 'https://packages.microsoft.com/keys/microsoft.asc'
-        state: present
+        dest: '/etc/apt/keyrings/'
+        mode: 'u=rw,go=r'
+        force: yes
       tags:
         - gui
         - vscode
@@ -58,22 +74,15 @@
     - name: add vscode repo
       become: yes
       apt_repository:
-        repo: 'deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main'
+        repo: >-
+          deb [arch=amd64 signed-by=/etc/apt/keyrings/microsoft.asc]
+          https://packages.microsoft.com/repos/code stable main
         filename: vscode
         update_cache: no
       tags:
         - gui
         - vscode
       register: vscode_repo
-
-    - name: add lazygit repo
-      become: yes
-      apt_repository:
-        repo: 'ppa:lazygit-team/release'
-        update_cache: no
-      tags:
-        - lazygit
-      register: lazygit_repo
 
     - name: apt-get update
       become: yes
@@ -83,4 +92,3 @@
         (kubernetes_repo is defined and kubernetes_repo.changed)
         or (chrome_repo is defined and chrome_repo.changed)
         or (vscode_repo is defined and vscode_repo.changed)
-        or (lazygit_repo is defined and lazygit_repo.changed)
