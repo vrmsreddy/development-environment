@@ -29,10 +29,10 @@ Vagrant.configure(2) do |config|
   # https://docs.vagrantup.com.
 
   # Every Vagrant development environment requires a box. You can search for
-  # boxes at https://atlas.hashicorp.com/search.
+  # boxes at https://app.vagrantup.com/boxes/search.
   # Important: use Bento boxes https://app.vagrantup.com/bento not the Canonical ones.
   # Bento boxes are officially-recommended by Vagrant https://www.vagrantup.com/docs/boxes.html
-  config.vm.box = 'bento/ubuntu-18.04'
+  config.vm.box = 'bento/ubuntu-20.04'
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -135,7 +135,7 @@ Vagrant.configure(2) do |config|
     },
 
     # Deprecated use intellij.edition instead
-    'intellij_edition' => 'community',
+    'intellij_edition' => nil,
 
     'intellij' => {
       'edition' => 'community',
@@ -176,7 +176,7 @@ Vagrant.configure(2) do |config|
   config.persistent_storage.volgroupname = 'persist-vg'
 
   # Update the VirtualBox Guest Additions
-  config.vbguest.auto_update = true
+  config.vbguest.auto_update = false
 
   config.vm.provider 'virtualbox' do |vb|
     # Give the VM a name
@@ -199,7 +199,7 @@ Vagrant.configure(2) do |config|
     vb.memory = config.user.virtualbox.memory
 
     # Enable host desktop integration
-    vb.customize ['modifyvm', :id, '--clipboard-mode', config.user.virtualbox.clipboard]
+    vb.customize ['modifyvm', :id, '--clipboard', config.user.virtualbox.clipboard]
     vb.customize ['modifyvm', :id, '--draganddrop', config.user.virtualbox.draganddrop]
 
     unless config.user.virtualbox.audio.nil?
@@ -292,6 +292,7 @@ SCRIPT
 
   # Perform preliminary setup before the main Ansible provisioning
   config.vm.provision 'ansible_local' do |ansible|
+    ansible.extra_vars = { ansible_python_interpreter: '/usr/bin/python3' }
     ansible.playbook = 'provisioning/init.yml'
     ansible.skip_tags = config.user.ansible.skip_tags
   end
@@ -300,8 +301,10 @@ SCRIPT
   config.vm.provision 'ansible_local' do |ansible|
     ansible.playbook = 'provisioning/playbook.yml'
     ansible.galaxy_role_file = 'provisioning/requirements.yml'
+    ansible.galaxy_roles_path = '/home/vagrant/.ansible/roles'
 
     ansible.extra_vars = {
+      ansible_python_interpreter: '/usr/bin/python3',
       timezone: config.user.timezone,
 
       locales_present: config.user.locales.present,
@@ -346,7 +349,7 @@ SCRIPT
   config.vm.provision :reload
 
   # Force password change on first use
-  #config.vm.provision 'shell', inline: 'chage --lastday 0 vagrant'
+  config.vm.provision 'shell', inline: 'chage --lastday 0 vagrant'
 
   #Push box to vagrantcloud.com
   config.push.define "ftp" do |push|
@@ -355,4 +358,3 @@ SCRIPT
     push.username = "vrmsreddy"
   end
 end
-
