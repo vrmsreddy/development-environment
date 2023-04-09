@@ -286,10 +286,10 @@
         - gui
 
     # Install Credential Manager for Git
-    - role: gantsign.git_credential_manager
-      tags:
-        - git-credential-manager
-        - gui
+    #- role: gantsign.git_credential_manager
+    #  tags:
+    #    - git-credential-manager
+    #    - gui
 
     # Install Google Chrome web browser
     - role: google-chrome
@@ -324,6 +324,7 @@
             - streetsidesoftware.code-spell-checker
             - wholroyd.jinja
             - rebornix.Ruby
+            - HashiCorp.terraform
           visual_studio_code_settings: {
             "editor.rulers": [80, 100, 120],
             "editor.renderWhitespace": true,
@@ -458,7 +459,6 @@
         - username: vagrant
           intellij_plugins:
             - CheckStyle-IDEA
-            - Lombook Plugin
             - LogSupport2
             - MavenRunHelper
             - de.platon42.cajon
@@ -723,6 +723,10 @@
           sdkman_default:
             maven: '3.8'
 
+    - role: darkwizard242.terraform
+    - role: darkwizard242.azurecli
+    - role: geerlingguy.postgresql
+      
   post_tasks:
     # Cleanup
     - name: remove dependencies that are no longer required

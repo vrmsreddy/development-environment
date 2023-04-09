@@ -78,3 +78,6 @@
   name: gantsign.xdesktop
 - src: gantsign.zswap
   version: '1.0.1'
+- src: darkwizard242.terraform
+- src: darkwizard242.azurecli
+- src: geerlingguy.postgresql
