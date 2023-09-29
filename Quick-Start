@@ -1,0 +1,30 @@
+22:58
+
+Ansible galaxy ,grant sign git
+https://github.com/vrmsreddy/development-environment
+
+Image of linux development located in cloud
+https://app.vagrantup.com/vrmsreddy/boxes/java-dev.world
+   vagrant login
+   Username: vr.msreddy@gmail.com
+
+1. Download and start environment using Vagrant Saved image
+	 vagrant login
+	     Username: vr.msreddy@gmail.com
+	     password: *****
+	  vagrant init vrmsreddy/java-dev.world  --box-version 1
+  vagrant up
+   
+2.  For Upgrade / First Time  Start
+Download and install Vagrant and virtualbox
+  sync  provisioning and Vagrantfile from https://github.com/gantsign/development-environment
+  to https://github.com/vrmsreddy/development-environment
+ and run below command
+ Vagrant up  
+ Vagrant provision (after book up vm ,comment with # if any tool failed to install in /provisioning/Playbook.yaml and requiremnts.yaml
+ 
+Login Ubuntu username/password = vagrant/javadevelopmentworld
+Other info https://gantsign.com/development-environment/docs/upgrade/
+
+3. For Cloud Upload
+Vagrant push
